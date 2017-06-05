@@ -13,16 +13,9 @@ import time
 import re
 import logging
 import os,sys
-try:
-    import xlrd
-except:
-    os.system('pip install -U xlrd')
-    import xlrd
-try:
-    from pyDes import *
-except ImportError as e:
-    os.system('pip install -U pyDes --allow-external pyDes --allow-unverified pyDes')
-    from pyDes import *
+import xlrd
+from pyDes import *
+from pyDes import *
 import hashlib
 import base64
 import smtplib  
@@ -90,7 +83,7 @@ def runTest(testCaseFile):
                     request_data = json.loads(request_data)
                     request_data = urlencode({'param':encodePostStr(request_data)})
                 else:
-                    request_data = urlencode(json.loads(request_data))
+                    request_data = json.loads(request_data) #urlencode(json.loads(request_data))
             except Exception as e:
                 logging.error(num + ' ' + api_purpose + ' 请求的数据有误，请检查[Request Data]字段是否是标准的json格式字符串！')
                 continue
@@ -239,13 +232,14 @@ def sendMail(text):
     smtp.quit() 
 
 def main():
-    errorTest = runTest('TestCase/TestCasePre.xlsx')
+    errorTest = runTest('TestCase/TestCase.xlsx')
     if len(errorTest) > 0:
         html = '<html><body>接口自动化定期扫描，共有 ' + str(len(errorTest)) + ' 个异常接口，列表如下：' + '</p><table><tr><th style="width:100px;">接口</th><th style="width:50px;">状态</th><th style="width:200px;">接口地址</th><th>接口返回值</th></tr>'
         for test in errorTest:
             html = html + '<tr><td>' + test[0] + '</td><td>' + test[1] + '</td><td>' + test[2] + '</td><td>' + test[3] + '</td></tr>'
         html = html + '</table></body></html>'
         #sendMail(html)
-
+    else:
+        print('成功！')
 if __name__ == '__main__':
     main()
