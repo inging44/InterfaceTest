@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-# Todo：接口自动化测试
-
 import json
 import http.client,mimetypes
 from urllib.parse import urlencode
