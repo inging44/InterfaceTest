@@ -83,7 +83,7 @@ def runTest(testCaseFile):
                     request_data = json.loads(request_data)
                     request_data = urlencode({'param':encodePostStr(request_data)})
                 else:
-                    request_data = json.loads(request_data) #urlencode(json.loads(request_data))
+                    request_data = urlencode(json.loads(request_data)) #urlencode(json.loads(request_data))
             except Exception as e:
                 logging.error(num + ' ' + api_purpose + ' 请求的数据有误，请检查[Request Data]字段是否是标准的json格式字符串！')
                 continue
@@ -139,11 +139,11 @@ Content-Transfer-Encoding:binary
 
 # 接口测试
 def interfaceTest(num,api_purpose,api_host,request_url,request_data,check_point,request_method,request_data_type,session):  
-    headers = {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',
-               'X-Requested-With':'XMLHttpRequest',
-               'Connection':'keep-alive',
-               'Referer':'http://' + api_host,
-               'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36'}
+    headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+               'X-Requested-With': 'XMLHttpRequest',
+               'Connection': 'keep-alive',
+               'Referer': 'http://' + api_host,
+               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36'}
     if session is not None:
         headers['Cookie'] = 'session=' + session
         if request_data_type == 'File':
@@ -153,25 +153,25 @@ def interfaceTest(num,api_purpose,api_host,request_url,request_data,check_point,
 
     conn = http.client.HTTPConnection(api_host)
     if request_method == 'POST':
-        conn.request('POST',request_url,request_data,headers=headers)
+        conn.request('POST', request_url, request_data, headers=headers)
     elif request_method == 'GET':
-        conn.request('GET',request_url+'?'+request_data,headers=headers)
+        conn.request('GET', request_url+'?'+request_data, headers=headers)
     else:
         logging.error(num + ' ' + api_purpose + ' HTTP请求方法错误，请确认[Request Method]字段是否正确！！！')
-        return 400,request_method
+        return 400, request_method
     response = conn.getresponse()
     status = response.status
     resp = response.read()
     if status == 200:
         resp = resp.decode('utf-8')
-        if re.search(check_point,str(resp)):
+        if re.search(check_point, str(resp)):
             logging.info(num + ' ' + api_purpose + ' 成功, ' + str(status) + ', ' + str(resp))
-            return status,json.loads(resp)
+            return status, json.loads(resp)
         else:
-            logging.error(num + ' ' + api_purpose + ' 失败！！！, [ ' + str(status) + ' ], ' + str(resp))
-            return 2001,resp
+            logging.error(num + ' ' + api_purpose + ' 失败1！！！, [ ' + str(status) + ' ], ' + str(resp))
+            return 2001, resp
     else:
-        logging.error(num + ' ' + api_purpose + ' 失败！！！, [ ' + str(status) + ' ], ' + str(resp))
+        logging.error(num + ' ' + api_purpose + ' 失败2！！！, [ ' + str(status) + ' ], ' + str(resp))
         return status,resp.decode('utf-8')
 
 #获取md5验证码
@@ -220,7 +220,7 @@ def sendMail(text):
     username = 'no-reply@myhost.cn'  
     password = 'password'  
     
-    msg = MIMEText(text,'html','utf-8')      
+    msg = MIMEText(text,'html', 'utf-8')
     msg['Subject'] = subject  
     msg['From'] = sender
     msg['To'] = ';'.join(receiver)
