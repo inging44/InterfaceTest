@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-# Todo：接口自动化测试
+# 接口自动化测试
 
 import model
 import logging
@@ -24,7 +24,7 @@ def main():
         for test in errorTest:
             html = html + '<tr><td>' + test[0] + '</td><td>' + test[1] + '</td><td>' + test[2] + '</td><td>' + test[3] + '</td></tr>'
         html = html + '</table></body></html>'
-        #sendMail(html)
+        # model.sendMail(html)
     else:
         print('成功！')
 
