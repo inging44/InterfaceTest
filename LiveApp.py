@@ -20,8 +20,8 @@ console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
 
-def main():
-    error_test = model.runTest('TestCase/TestCase.xlsx')
+def main(filename, sheet_name):
+    error_test = model.runTest(filename, sheet_name)
     if len(error_test) > 0:
         html = '<html><body>接口自动化定期扫描，共有 ' + str(len(error_test)) + ' 个异常接口，列表如下：' \
                + '</p><table><tr><th style="width:100px;">接口</th><th style="width:50px;">状态</th>' \
@@ -30,11 +30,11 @@ def main():
             html = html + '<tr><td>' + test[0] + '</td><td>' + test[1] + '</td><td>' + test[2] + '</td><td>' \
                    + test[3] + '</td></tr>'
         html = html + '</table></body></html>'
-        model.sendMail(html)
+        # model.sendMail(html)
     else:
-        model.sendMail('success')
+        # model.sendMail('success')
         print('成功！')
 
 
 if __name__ == '__main__':
-    main()
+    main('TestCase/TestCase.xlsx', 'sign_in_1')

@@ -27,34 +27,54 @@ from email.mime.text import MIMEText
 # formatter = logging.Formatter(log_format)
 # console.setFormatter(formatter)
 # logging.getLogger('').addHandler(console)
-# 获取并执行测试用例
-def runTest(testCaseFile):
-    testCaseFile = os.path.join(os.getcwd(), testCaseFile)
+
+
+# 反转字典的键和值
+def invert_dict(d):
+    return dict((v, k) for k, v in d.iteritems())
+
+
+# 获取用例并执行测试用例
+def runTest(testCase_file, sheet_name):
+    # 读取文件
+    testCaseFile = os.path.join(os.getcwd(), testCase_file)
     if not os.path.exists(testCaseFile):
         logging.error('测试用例文件不存在！！！')
         sys.exit()
     testCase = xlrd.open_workbook(testCaseFile)
-    table = testCase.sheet_by_index(0)
+    # 读取第一个sheet
+    table = testCase.sheet_by_name(sheet_name)
+    # 初始化失败case
     errorCase = []
     correlationDict = {}
     correlationDict['${hashPassword}'] = hash1Encode('123456')
     correlationDict['${session}'] = None
-    for i in range(1, table.nrows):
+
+    # 将列名组装成字典（列名为键，列数为值）
+    row_name = table.row_values(1)
+    row_val = []
+    for i in range(0, len(row_name)):
+        row_val.append(i)
+    # 将row_name、row_val两个列表组合成字典
+    rows = dict(zip(row_name, row_val))
+
+    for i in range(2, table.nrows):
         correlationDict['${randomEmail}'] = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 6)) + '@automation.test'
         correlationDict['${randomTel}'] = '186' + str(random.randint(10000000, 99999999))
         correlationDict['${timestamp}'] = int(time.time())
-        if table.cell(i, 10).value.replace('\n', '').replace('\r', '') != 'Yes':
+        if table.cell(i, rows['Active']).value.replace('\n', '').replace('\r', '') != 'Yes':
             continue
-        num = str(int(table.cell(i, 0).value)).replace('\n', '').replace('\r', '')
-        api_purpose = table.cell(i, 1).value.replace('\n', '').replace('\r', '')
-        api_host = table.cell(i, 2).value.replace('\n', '').replace('\r', '')
-        request_url = table.cell(i, 3).value.replace('\n', '').replace('\r', '')
-        request_method = table.cell(i, 4).value.replace('\n', '').replace('\r', '')
-        request_data_type = table.cell(i, 5).value.replace('\n', '').replace('\r', '')
-        request_data = table.cell(i, 6).value.replace('\n', '').replace('\r', '')
-        encryption = table.cell(i, 7).value.replace('\n', '').replace('\r', '')
-        check_point = table.cell(i, 8).value
-        correlation = table.cell(i, 9).value.replace('\n', '').replace('\r', '').split(';')
+        num = table.cell(i, rows['No.']).value.replace('\n', '').replace('\r', '')
+        api_purpose = table.cell(i, rows['API Purpose']).value.replace('\n', '').replace('\r', '')
+        api_host = table.cell(i, rows['API Host']).value.replace('\n', '').replace('\r', '')
+        request_url = table.cell(i, rows['Request URL']).value.replace('\n', '').replace('\r', '')
+        request_method = table.cell(i, rows['Request Method']).value.replace('\n', '').replace('\r', '')
+        request_data_type = table.cell(i, rows['Request Data Type']).value.replace('\n', '').replace('\r', '')
+        request_data = table.cell(i, rows['Request Data']).value.replace('\n', '').replace('\r', '')
+        encryption = table.cell(i, rows['Encryption']).value.replace('\n', '').replace('\r', '')
+        check_point = table.cell(i, rows['Check Point']).value
+        correlation = table.cell(i, rows['Correlation']).value.replace('\n', '').replace('\r', '').split(';')
+
         for key in correlationDict:
             if request_url.find(key) > 0:
                 request_url = request_url.replace(key, str(correlationDict[key]))
@@ -103,15 +123,16 @@ def runTest(testCaseFile):
             data = fopen.read()
             fopen.close()
             request_data = '''
-------WebKitFormBoundaryDf9uRfwb8uzv1eNe
-Content-Disposition:form-data;name="file";filename="%s"
-Content-Type:
-Content-Transfer-Encoding:binary
-%s
-------WebKitFormBoundaryDf9uRfwb8uzv1eNe--
-    ''' % (os.path.basename(dataFile), data)
+                ------WebKitFormBoundaryDf9uRfwb8uzv1eNe
+                Content-Disposition:form-data;name="file";filename="%s"
+                Content-Type:
+                Content-Transfer-Encoding:binary
+                %s
+                ------WebKitFormBoundaryDf9uRfwb8uzv1eNe--
+            ''' % (os.path.basename(dataFile), data)
         status, resp = interfaceTest(num, api_purpose, api_host, request_url, request_data, check_point, request_method,
                                      request_data_type, correlationDict['${session}'])
+        # 判断请求结果
         if status != 200:
             errorCase.append((num + ' ' + api_purpose, str(status), 'http://' + api_host + request_url, resp))
             continue
@@ -163,15 +184,15 @@ def interfaceTest(num, api_purpose, api_host, request_url, request_data, check_p
     status = response.status
     resp = response.read()
     if status == 200:
-        resp = resp.decode('utf-8')
-        if re.search(check_point, str(resp)):
+        resp = resp.decode('utf-8').replace('\n\t\t', '').replace(' ', '')
+        if re.search(check_point.replace(' ', ''), str(resp)):
             logging.info(num + ' ' + api_purpose + ' 成功, ' + str(status) + ', ' + str(resp))
             return status, json.loads(resp)
         else:
-            logging.error(num + ' ' + api_purpose + ' 失败！！！, [ ' + str(status) + ' ], ' + str(resp))
+            logging.error(num + ' ' + api_purpose + ' 操作失败！！！, [ ' + str(status) + ' ], ' + str(resp))
             return 2001, resp
     else:
-        logging.error(num + ' ' + api_purpose + ' 失败！！！, [ ' + str(status) + ' ], ' + str(resp))
+        logging.error(num + ' ' + api_purpose + ' 请求失败！！！, [ ' + str(status) + ' ], ' + str(resp))
         return status, resp.decode('utf-8')
 
 
@@ -220,7 +241,7 @@ def sendMail(text):
     sender = '13990122270@163.com'
     receiver = ['huanglanting@kuaijiankang.com']
     mailToCc = ['738631563@qq.com']
-    subject = '[AutomantionTest]接口自动化测试报告通知'
+    subject = '接口自动化测试报告通知'
     smtpserver = 'smtp.163.com'
     username = '13990122270@163.com'
     password = 'qwertyuioplmn123'
