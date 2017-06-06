@@ -37,4 +37,4 @@ def main(filename, sheet_name):
 
 
 if __name__ == '__main__':
-    main('TestCase/TestCase.xlsx', 'sign_in_1')
+    main('TestCase/TestCase.xlsx', 'action1')

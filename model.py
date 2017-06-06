@@ -64,10 +64,14 @@ def runTest(testCase_file, sheet_name):
         correlationDict['${timestamp}'] = int(time.time())
         if table.cell(i, rows['Active']).value.replace('\n', '').replace('\r', '') != 'Yes':
             continue
+        request_url = table.cell(i, rows['Request URL']).value.replace('\n', '').replace('\r', '')
         num = table.cell(i, rows['No.']).value.replace('\n', '').replace('\r', '')
+        if request_url == '' or num == '':
+            print('sth empty')
+            continue
         api_purpose = table.cell(i, rows['API Purpose']).value.replace('\n', '').replace('\r', '')
         api_host = table.cell(i, rows['API Host']).value.replace('\n', '').replace('\r', '')
-        request_url = table.cell(i, rows['Request URL']).value.replace('\n', '').replace('\r', '')
+
         request_method = table.cell(i, rows['Request Method']).value.replace('\n', '').replace('\r', '')
         request_data_type = table.cell(i, rows['Request Data Type']).value.replace('\n', '').replace('\r', '')
         request_data = table.cell(i, rows['Request Data']).value.replace('\n', '').replace('\r', '')
