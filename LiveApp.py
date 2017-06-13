@@ -37,4 +37,4 @@ def main(filename, sheet_name):
 
 
 if __name__ == '__main__':
-    main('TestCase/TestCase.xlsx', 'action1')
+    main('TestCase/b.xlsx', 'api1')

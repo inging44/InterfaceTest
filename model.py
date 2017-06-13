@@ -78,7 +78,7 @@ def runTest(testCase_file, sheet_name):
         encryption = table.cell(i, rows['Encryption']).value.replace('\n', '').replace('\r', '')
         check_point = table.cell(i, rows['Check Point']).value
         correlation = table.cell(i, rows['Correlation']).value.replace('\n', '').replace('\r', '').split(';')
-
+        isContains = table.cell(i, rows['isContains']).value.replace('\n', '').replace('\r', '')
         for key in correlationDict:
             if request_url.find(key) > 0:
                 request_url = request_url.replace(key, str(correlationDict[key]))
@@ -121,7 +121,8 @@ def runTest(testCase_file, sheet_name):
         elif request_data_type == 'File':
             dataFile = request_data
             if not os.path.exists(dataFile):
-                logging.error(num + ' ' + api_purpose + ' 文件路径配置无效，请检查[Request Data]字段配置的文件路径是否存在！！！')
+                logging.error(num + ' ' + api_purpose
+                              + ' 文件路径配置无效，请检查[Request Data]字段配置的文件路径是否存在！！！')
                 continue
             fopen = open(dataFile, 'rb')
             data = fopen.read()
@@ -135,7 +136,7 @@ def runTest(testCase_file, sheet_name):
                 ------WebKitFormBoundaryDf9uRfwb8uzv1eNe--
             ''' % (os.path.basename(dataFile), data)
         status, resp = interfaceTest(num, api_purpose, api_host, request_url, request_data, check_point, request_method,
-                                     request_data_type, correlationDict['${session}'])
+                                     request_data_type, correlationDict['${session}'], isContains)
         # 判断请求结果
         if status != 200:
             errorCase.append((num + ' ' + api_purpose, str(status), 'http://' + api_host + request_url, resp))
@@ -162,12 +163,14 @@ def runTest(testCase_file, sheet_name):
 
 # 接口测试
 def interfaceTest(num, api_purpose, api_host, request_url, request_data, check_point, request_method, request_data_type,
-                  session):
+                  session,isContains):
     headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                'X-Requested-With': 'XMLHttpRequest',
                'Connection': 'keep-alive',
+               'CLIENT': 'WEB',
                'Referer': 'http://' + api_host,
-               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36'}
+               'sign': 'AAA',
+               'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'}
     if session is not None:
         headers['Cookie'] = 'session=' + session
         if request_data_type == 'File':
@@ -189,7 +192,8 @@ def interfaceTest(num, api_purpose, api_host, request_url, request_data, check_p
     resp = response.read()
     if status == 200:
         resp = resp.decode('utf-8').replace('\n\t\t', '').replace(' ', '')
-        if re.search(check_point.replace(' ', ''), str(resp)):
+        result = str(resp).find(check_point.replace(' ', ''))
+        if result == 1 if isContains == 'Yes' else result == -1:
             logging.info(num + ' ' + api_purpose + ' 成功, ' + str(status) + ', ' + str(resp))
             return status, json.loads(resp)
         else:
