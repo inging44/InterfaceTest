@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="zh-CN">
+<head>
+<title>内地居民理财状况调查</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<style type="text/css">
+	body{
+		font-family: 微软雅黑;
+		text-align: center;
+	}
+	h1 {
+		text-align: center;
+		line-height: 100px;
+	}
+	#container {
+		margin: 0 auto;	
+		font-size: 20px;
+		text-align: left;
+		padding-left: 100px;
+	}
+	.noBorder {
+		border-left-width:0px;
+		border-top-width:0px;
+		border-right-width:0px;
+		border-bottom-color:black;
+		height: 50px;
+		width: 150px;
+		font-family: 微软雅黑;
+		font-size: 20px;
+	}
+	#inputDiv {
+		padding-top: 100px;
+		line-height: 50px;
+	}
+	
+	.remark {
+		width: 300px;
+		height: 50px;
+	}
+	.submit {
+		margin: 0 auto;	
+		font-family: 微软雅黑;
+		font-size: 20px;
+	}
+</style>
+</head>
+    <body>
+    	<h1>内地居民理财状况调查</h1>
+    	<div id="container">
+	    	<div >
+	    		<p>1、您知道人民币正在贬值吗？</p>
+	    		<input type="radio" id="question11" name="question1" value="1"/><label for="question11">知道</label>
+	    		<input type="radio" id="question12" name="question1" value="0"/><label for="question12">不知道</label>
+	    	</div>
+
+	    	<div>
+	    		<p>2、您觉得人民币贬值对您的生活有影响吗？</p>
+	    		<input type="radio" id="question21" name="question2" value="1"/><label for="question21">有影响</label>
+	    		<input type="radio" id="question22" name="question2" value="0"/><label for="question22">没影响</label>
+	    	</div>
+
+	    	<div>
+	    		<p>3、您知道规避人民币贬值风险的方法吗？</p>
+	    		<input type="radio" id="question31" name="question3" value="1"/><label for="question31">知道</label>
+	    		<input type="radio" id="question32" name="question3" value="0"/><label for="question32">不知道</label>
+	    	</div>
+
+	    	<div>
+	    		<p>4、您了解过香港的理财和保险吗？</p>
+	    		<input type="radio" id="question41" name="question4" value="是" /><label for="question41">了解</label>
+	    		<input type="radio" id="question42" name="question4" value="否" /><label for="question42">不了解</label>
+	    	</div>
+
+	    	<div id="inputDiv">
+	    		<label for="username">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+	    		<input type="text" id="username" name="username" class="noBorder">&nbsp;&nbsp;
+	    		<label for="province">省&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份：</label>
+	    		<input type="text" id="province" name="province" class="noBorder"><br/>
+	    		<label for="tel">联系方式：</label>
+	    		<input type="number" id="tel" name="tel" class="noBorder">
+	    	</div>
+	    	<br/>
+	    	<br/>
+	    	<br/>
+	    	<div id="remark">
+	    		<label for="tel">备注：</label>
+	    		<textarea name="ramark" class="noBorder remark"></textarea><br/>
+	    		<button class="submit" type="button" onclick="submitData()">提交</button>
+	    	</div>
+
+	    	
+    </div>
+    </body>
+</html>
