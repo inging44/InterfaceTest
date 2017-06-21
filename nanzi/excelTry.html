@@ -1,137 +1,183 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="zh-CN">
-<head>
-<title>js的excel写入尝试</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript">
-	// var xlApp, xlSheet;  
-	// xlApp = new ActiveXObject("Excel.Application");
-	// xlApp.Visible = true;  
-	// xlApp.Workbooks.Add(); 
-	// var ExcelSheet = xlApp.Workbooks.Open("./data.xlsx");
-	// ExcelSheet.Application.Visible = true;    
+    <head>
+        <title>内地居民理财状况调查</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script type="text/javascript" src="FileSaver.min.js" charset="utf-8"></script>
+        <style type="text/css">
+            body{
+                font-family: 微软雅黑;
+                text-align: center;
+            }
+            h1 {
+                text-align: center;
+                line-height: 100px;
+            }
+            #container {
+                margin: 0 auto; 
+                font-size: 20px;
+                text-align: left;
+                padding-left: 100px;
+            }
+            .noBorder {
+                border-left-width:0px;
+                border-top-width:0px;
+                border-right-width:0px;
+                border-bottom-color:black;
+                height: 50px;
+                width: 150px;
+                font-family: 微软雅黑;
+                font-size: 20px;
+            }
+            #inputDiv {
+                padding-top: 100px;
+                line-height: 50px;
+            }
+            
+            .remark {
+                width: 300px;
+                height: 50px;
+            }
+            .submit {
+                margin: 0 auto; 
+                font-family: 微软雅黑;
+                font-size: 20px;
+            }
+            .myradio {
 
-
-
-
-	var idTmr;  
-    function  getExplorer() {  
-        var explorer = window.navigator.userAgent ;  
-        //ie  
-        if (explorer.indexOf("MSIE") >= 0) {  
-            return 'ie';  
-        }  
-        //firefox  
-        else if (explorer.indexOf("Firefox") >= 0) {  
-            return 'Firefox';  
-        }  
-        //Chrome  
-        else if(explorer.indexOf("Chrome") >= 0){  
-            return 'Chrome';  
-        }  
-        //Opera  
-        else if(explorer.indexOf("Opera") >= 0){  
-            return 'Opera';  
-        }  
-        //Safari  
-        else if(explorer.indexOf("Safari") >= 0){  
-            return 'Safari';  
-        }  
-    }  
-    function method5(tableid) {  
-        if(getExplorer()=='ie')  
-        {  
-            var curTbl = document.getElementById(tableid);  
-            var oXL = new ActiveXObject("Excel.Application");  
-            var oWB = oXL.Workbooks.Add();  
-            var xlsheet = oWB.Worksheets(1);  
-            var sel = document.body.createTextRange();  
-            sel.moveToElementText(curTbl);  
-            sel.select();  
-            sel.execCommand("Copy");  
-            xlsheet.Paste();  
-            oXL.Visible = true;  
-
-            try {  
-                var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");  
-            } catch (e) {  
-                print("Nested catch caught " + e);  
-            } finally {  
-                oWB.SaveAs(fname);  
-                oWB.Close(savechanges = false);  
-                oXL.Quit();  
-                oXL = null;  
-                idTmr = window.setInterval("Cleanup();", 1);  
-            }  
-
-        }  
-        else  
-        {  
-            tableToExcel(tableid)  
-        }  
-    }  
-    function Cleanup() {  
-        window.clearInterval(idTmr);  
-        CollectGarbage();  
-    }  
-    var tableToExcel = (function() {  
-        var uri = 'data:application/vnd.ms-excel;base64,',  
-                template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',  
-                base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },  
-                format = function(s, c) {  
-                    return s.replace(/{(\w+)}/g,  
-                            function(m, p) { return c[p]; }) }  
-        return function(table, name) {  
-            if (!table.nodeType) table = document.getElementById(table)  
-            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}  
-            window.location.href = uri + base64(format(template, ctx))  
-        }  
-    })()  
-  
-</script>
-</head>
+            }
+        </style>
+    </head>
     <body>
-    	<div >  
-    <button type="button" onclick="method1('tableExcel')">导出Excel方法一</button>  
-    <button type="button" onclick="method2('tableExcel')">导出Excel方法二</button>  
-    <button type="button" onclick="getXlsFromTbl('tableExcel','myDiv')">导出Excel方法三</button>  
-    <button type="button" onclick="method4('tableExcel')">导出Excel方法四</button>  
-    <button type="button" onclick="method5('tableExcel')">导出Excel方法五</button>  
-</div>  
-<div id="myDiv">  
-<table id="tableExcel" width="100%" border="1" cellspacing="0" cellpadding="0">  
-    <tr>  
-        <td colspan="5" align="center">html 表格导出道Excel</td>  
-    </tr>  
-    <tr>  
-        <td>列标题1</td>  
-        <td>列标题2</td>  
-        <td>类标题3</td>  
-        <td>列标题4</td>  
-        <td>列标题5</td>  
-    </tr>  
-    <tr>  
-        <td>aaa</td>  
-        <td>bbb</td>  
-        <td>ccc</td>  
-        <td>ddd</td>  
-        <td>eee</td>  
-    </tr>  
-    <tr>  
-        <td>AAA</td>  
-        <td>BBB</td>  
-        <td>CCC</td>  
-        <td>DDD</td>  
-        <td>EEE</td>  
-    </tr>  
-    <tr>  
-        <td>FFF</td>  
-        <td>GGG</td>  
-        <td>HHH</td>  
-        <td>III</td>  
-        <td>JJJ</td>  
-    </tr>  
-</table>  
-</div> 
+        <h1>内地居民理财状况调查</h1>
+        <div id="container">
+            <div >
+                <p>1、您知道人民币正在贬值吗？</p>
+                <input type="radio" class="myradio" id="question11" name="question1" value="1"/><label for="question11">知道</label>
+                <input type="radio" class="myradio" id="question12" name="question1" value="0"/><label for="question12">不知道</label>
+            </div>
+
+            <div>
+                <p>2、您觉得人民币贬值对您的生活有影响吗？</p>
+                <input type="radio" class="myradio" id="question21" name="question2" value="1"/><label for="question21">有影响</label>
+                <input type="radio" class="myradio" id="question22" name="question2" value="0"/><label for="question22">没影响</label>
+            </div>
+
+            <div>
+                <p>3、您知道规避人民币贬值风险的方法吗？</p>
+                <input type="radio" class="myradio" id="question31" name="question3" value="1"/><label for="question31">知道</label>
+                <input type="radio" class="myradio" id="question32" name="question3" value="0"/><label for="question32">不知道</label>
+            </div>
+
+            <div>
+                <p>4、您了解过香港的理财和保险吗？</p>
+                <input type="radio" class="myradio" id="question41" name="question4" value="是" /><label for="question41">了解</label>
+                <input type="radio" class="myradio" id="question42" name="question4" value="否" /><label for="question42">不了解</label>
+            </div>
+
+            <div id="inputDiv">
+                <label for="username">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                <input type="text" id="username" name="username" class="noBorder">&nbsp;&nbsp;
+                <label for="province">省&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份：</label>
+                <input type="text" id="province" name="province" class="noBorder"><br/>
+                <label for="tel">联系方式：</label>
+                <input type="number" id="tel" name="tel" class="noBorder">
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <div>
+                <label for="tel">备注：</label>
+                <textarea id="remark" class="noBorder remark"></textarea><br/>
+                <button class="submit" type="button" onclick="submitData()">
+                    <!--<input type="file" id="file" onchange="submitData()"/>-->
+                    提交
+                </button>
+            </div>
+        </div>
     </body>
+    <script>
+        /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
+        var saveAs=saveAs||function(e){"use strict";if(typeof e==="undefined"||typeof navigator!=="undefined"&&/MSIE [1-9]\./.test(navigator.userAgent)){return}var t=e.document,n=function(){return e.URL||e.webkitURL||e},r=t.createElementNS("http://www.w3.org/1999/xhtml","a"),o="download"in r,a=function(e){var t=new MouseEvent("click");e.dispatchEvent(t)},i=/constructor/i.test(e.HTMLElement)||e.safari,f=/CriOS\/[\d]+/.test(navigator.userAgent),u=function(t){(e.setImmediate||e.setTimeout)(function(){throw t},0)},s="application/octet-stream",d=1e3*40,c=function(e){var t=function(){if(typeof e==="string"){n().revokeObjectURL(e)}else{e.remove()}};setTimeout(t,d)},l=function(e,t,n){t=[].concat(t);var r=t.length;while(r--){var o=e["on"+t[r]];if(typeof o==="function"){try{o.call(e,n||e)}catch(a){u(a)}}}},p=function(e){if(/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type)){return new Blob([String.fromCharCode(65279),e],{type:e.type})}return e},v=function(t,u,d){if(!d){t=p(t)}var v=this,w=t.type,m=w===s,y,h=function(){l(v,"writestart progress write writeend".split(" "))},S=function(){if((f||m&&i)&&e.FileReader){var r=new FileReader;r.onloadend=function(){var t=f?r.result:r.result.replace(/^data:[^;]*;/,"data:attachment/file;");var n=e.open(t,"_blank");if(!n)e.location.href=t;t=undefined;v.readyState=v.DONE;h()};r.readAsDataURL(t);v.readyState=v.INIT;return}if(!y){y=n().createObjectURL(t)}if(m){e.location.href=y}else{var o=e.open(y,"_blank");if(!o){e.location.href=y}}v.readyState=v.DONE;h();c(y)};v.readyState=v.INIT;if(o){y=n().createObjectURL(t);setTimeout(function(){r.href=y;r.download=u;a(r);h();c(y);v.readyState=v.DONE});return}S()},w=v.prototype,m=function(e,t,n){return new v(e,t||e.name||"download",n)};if(typeof navigator!=="undefined"&&navigator.msSaveOrOpenBlob){return function(e,t,n){t=t||e.name||"download";if(!n){e=p(e)}return navigator.msSaveOrOpenBlob(e,t)}}w.abort=function(){};w.readyState=w.INIT=0;w.WRITING=1;w.DONE=2;w.error=w.onwritestart=w.onprogress=w.onwrite=w.onabort=w.onerror=w.onwriteend=null;return m}(typeof self!=="undefined"&&self||typeof window!=="undefined"&&window||this.content);if(typeof module!=="undefined"&&module.exports){module.exports.saveAs=saveAs}else if(typeof define!=="undefined"&&define!==null&&define.amd!==null){define("FileSaver.js",function(){return saveAs})}
+
+        function submitData(){
+            var username = document.getElementById('username').value ? document.getElementById('username').value : '空姓名';
+            var province = document.getElementById('province').value ? document.getElementById('province').value : '空省份';
+            var tel = document.getElementById('tel').value ? document.getElementById('tel').value : '空电话';
+            var Q4 = "否";
+            if(document.getElementById('question31').checked){
+                Q4 = "是";
+            }else{
+                Q4 = "否";
+            }
+            var remark = document.getElementById('remark').value;
+            var time = getNowFormatDate();//读取当前时间
+
+        // var selectedFile = document.getElementById("file").files[0];//获取读取的File对象
+         //    var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
+         //    reader.readAsText(selectedFile,'gbk');//读取文件的内容，gbk保证中文不乱码
+         //    reader.onload = function(){
+         //         //this.result即为文件内容，当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
+         //        //和老数据拼接成新数据
+         //        var content = this.result+"\r\n"+username+"，"+province+"，"+tel+"，"+Q4+"，"+time+"，"+remark;
+         //        //新数据写入txt文件
+            //     var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+
+            //     saveAs(blob, time+"data.txt");//保存
+            // };
+            
+
+            var data = new Array();
+            data = [username,province,tel,Q4,time,remark];
+            // if(window.localStorage.mydata){
+            //  window.localStorage.mydatadata;
+            // }else{
+            //  window.localStorage.mydata[0] = data;
+            // }
+
+            window.localStorage.mydata = window.localStorage.mydata ? window.localStorage.mydata+'\r\n'+data : data;
+            console.log(window.localStorage.mydata);
+            alert('数据保存成功~');
+            location.reload();
+        }
+
+
+        /*
+        *获取当前时间
+        */
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+                    + " " + date.getHours() + seperator2 + date.getMinutes()
+                    + seperator2 + date.getSeconds();
+            return currentdate;
+        } 
+
+//写入数据到localStorage
+        function setLocalStorage(data){
+            if(window.localStorage){
+                window.localStorage.mydata = window.localStorage.mydata ? window.localStorage.mydata+data : data;
+            }else{
+                alert('浏览器不支持缓存，请换浏览器试试！');
+            }
+        }
+
+//下载localStorage的数据存成文件到本地
+        function getFile(){
+            if(window.localStorage){
+                var content = window.localStorage.mydata ? window.localStorage.mydata : '尚无用户数据';
+
+            }
+        }
+    </script>
 </html>
