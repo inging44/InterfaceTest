@@ -3,7 +3,6 @@
     <head>
         <title>内地居民理财状况调查</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <script type="text/javascript" src="FileSaver.min.js" charset="utf-8"></script>
         <style type="text/css">
             body{
                 font-family: 微软雅黑;
@@ -42,36 +41,45 @@
                 margin: 0 auto; 
                 font-family: 微软雅黑;
                 font-size: 20px;
+                width:30%;
+                height:100%;
+                margin-top: 50px;
             }
             .myradio {
-
+                width: 18px;
+                height: 18px;
             }
         </style>
     </head>
     <body>
         <h1>内地居民理财状况调查</h1>
         <div id="container">
-            <div >
+
+            <div>
                 <p>1、您知道人民币正在贬值吗？</p>
                 <input type="radio" class="myradio" id="question11" name="question1" value="1"/><label for="question11">知道</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" class="myradio" id="question12" name="question1" value="0"/><label for="question12">不知道</label>
             </div>
 
             <div>
                 <p>2、您觉得人民币贬值对您的生活有影响吗？</p>
                 <input type="radio" class="myradio" id="question21" name="question2" value="1"/><label for="question21">有影响</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" class="myradio" id="question22" name="question2" value="0"/><label for="question22">没影响</label>
             </div>
 
             <div>
                 <p>3、您知道规避人民币贬值风险的方法吗？</p>
                 <input type="radio" class="myradio" id="question31" name="question3" value="1"/><label for="question31">知道</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" class="myradio" id="question32" name="question3" value="0"/><label for="question32">不知道</label>
             </div>
 
             <div>
                 <p>4、您了解过香港的理财和保险吗？</p>
                 <input type="radio" class="myradio" id="question41" name="question4" value="是" /><label for="question41">了解</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" class="myradio" id="question42" name="question4" value="否" /><label for="question42">不了解</label>
             </div>
 
@@ -89,17 +97,20 @@
             <div>
                 <label for="tel">备注：</label>
                 <textarea id="remark" class="noBorder remark"></textarea><br/>
-                <button class="submit" type="button" onclick="submitData()">
-                    <!--<input type="file" id="file" onchange="submitData()"/>-->
-                    提交
-                </button>
+                <center><button class="submit" type="button" onclick="submitData()">提交</button></center>
+                <a harf="#" style="font-size:14px;float:right;" onclick="getFile()">保存</a>
             </div>
+
+                
         </div>
     </body>
     <script>
-        /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
+
+//引入下载文件所需的js库文件
+           /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
         var saveAs=saveAs||function(e){"use strict";if(typeof e==="undefined"||typeof navigator!=="undefined"&&/MSIE [1-9]\./.test(navigator.userAgent)){return}var t=e.document,n=function(){return e.URL||e.webkitURL||e},r=t.createElementNS("http://www.w3.org/1999/xhtml","a"),o="download"in r,a=function(e){var t=new MouseEvent("click");e.dispatchEvent(t)},i=/constructor/i.test(e.HTMLElement)||e.safari,f=/CriOS\/[\d]+/.test(navigator.userAgent),u=function(t){(e.setImmediate||e.setTimeout)(function(){throw t},0)},s="application/octet-stream",d=1e3*40,c=function(e){var t=function(){if(typeof e==="string"){n().revokeObjectURL(e)}else{e.remove()}};setTimeout(t,d)},l=function(e,t,n){t=[].concat(t);var r=t.length;while(r--){var o=e["on"+t[r]];if(typeof o==="function"){try{o.call(e,n||e)}catch(a){u(a)}}}},p=function(e){if(/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type)){return new Blob([String.fromCharCode(65279),e],{type:e.type})}return e},v=function(t,u,d){if(!d){t=p(t)}var v=this,w=t.type,m=w===s,y,h=function(){l(v,"writestart progress write writeend".split(" "))},S=function(){if((f||m&&i)&&e.FileReader){var r=new FileReader;r.onloadend=function(){var t=f?r.result:r.result.replace(/^data:[^;]*;/,"data:attachment/file;");var n=e.open(t,"_blank");if(!n)e.location.href=t;t=undefined;v.readyState=v.DONE;h()};r.readAsDataURL(t);v.readyState=v.INIT;return}if(!y){y=n().createObjectURL(t)}if(m){e.location.href=y}else{var o=e.open(y,"_blank");if(!o){e.location.href=y}}v.readyState=v.DONE;h();c(y)};v.readyState=v.INIT;if(o){y=n().createObjectURL(t);setTimeout(function(){r.href=y;r.download=u;a(r);h();c(y);v.readyState=v.DONE});return}S()},w=v.prototype,m=function(e,t,n){return new v(e,t||e.name||"download",n)};if(typeof navigator!=="undefined"&&navigator.msSaveOrOpenBlob){return function(e,t,n){t=t||e.name||"download";if(!n){e=p(e)}return navigator.msSaveOrOpenBlob(e,t)}}w.abort=function(){};w.readyState=w.INIT=0;w.WRITING=1;w.DONE=2;w.error=w.onwritestart=w.onprogress=w.onwrite=w.onabort=w.onerror=w.onwriteend=null;return m}(typeof self!=="undefined"&&self||typeof window!=="undefined"&&window||this.content);if(typeof module!=="undefined"&&module.exports){module.exports.saveAs=saveAs}else if(typeof define!=="undefined"&&define!==null&&define.amd!==null){define("FileSaver.js",function(){return saveAs})}
 
+        //保存数据至缓存
         function submitData(){
             var username = document.getElementById('username').value ? document.getElementById('username').value : '空姓名';
             var province = document.getElementById('province').value ? document.getElementById('province').value : '空省份';
@@ -113,31 +124,16 @@
             var remark = document.getElementById('remark').value;
             var time = getNowFormatDate();//读取当前时间
 
-        // var selectedFile = document.getElementById("file").files[0];//获取读取的File对象
-         //    var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
-         //    reader.readAsText(selectedFile,'gbk');//读取文件的内容，gbk保证中文不乱码
-         //    reader.onload = function(){
-         //         //this.result即为文件内容，当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
-         //        //和老数据拼接成新数据
-         //        var content = this.result+"\r\n"+username+"，"+province+"，"+tel+"，"+Q4+"，"+time+"，"+remark;
-         //        //新数据写入txt文件
-            //     var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
-
-            //     saveAs(blob, time+"data.txt");//保存
-            // };
-            
-
+            //当前用户数据拼接成数组
             var data = new Array();
             data = [username,province,tel,Q4,time,remark];
-            // if(window.localStorage.mydata){
-            //  window.localStorage.mydatadata;
-            // }else{
-            //  window.localStorage.mydata[0] = data;
-            // }
 
+            //读取缓存中的老用户数据，和新用户数据一起拼接并重新保存在缓存中
             window.localStorage.mydata = window.localStorage.mydata ? window.localStorage.mydata+'\r\n'+data : data;
-            console.log(window.localStorage.mydata);
-            alert('数据保存成功~');
+            //console.log(window.localStorage.mydata);
+            //弹出提示框
+            alert(window.localStorage.mydata);
+            //页面刷新（重置）
             location.reload();
         }
 
@@ -163,20 +159,17 @@
             return currentdate;
         } 
 
-//写入数据到localStorage
-        function setLocalStorage(data){
-            if(window.localStorage){
-                window.localStorage.mydata = window.localStorage.mydata ? window.localStorage.mydata+data : data;
-            }else{
-                alert('浏览器不支持缓存，请换浏览器试试！');
-            }
-        }
 
-//下载localStorage的数据存成文件到本地
+        //下载localStorage的数据存成文件到本地
         function getFile(){
             if(window.localStorage){
                 var content = window.localStorage.mydata ? window.localStorage.mydata : '尚无用户数据';
-
+                //新数据写入txt文件
+                 var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+                 if (confirm("下载之后是否需要清除缓存数据，保证之后的数据干净？")){
+                        window.localStorage.removeItem('mydata');
+                 }
+                 saveAs(blob, "data"+getNowFormatDate()+".txt");//保存
             }
         }
     </script>

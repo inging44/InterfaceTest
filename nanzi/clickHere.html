@@ -49,6 +49,9 @@
 				width: 18px;
 				height: 18px;
 			}
+			.mydata {
+				/*visibility : hidden;	*/
+			}
 		</style>
 	</head>
 	<body>
@@ -98,17 +101,22 @@
 	    		<label for="tel">备注：</label>
 	    		<textarea id="remark" class="noBorder remark"></textarea><br/>
 	    		<center><button class="submit" type="button" onclick="submitData()">提交</button></center>
-	    		<a harf="#" style="font-size:14px;float:right;" onclick="getFile()">保存</a>
+	    		<a harf="#" style="font-size:14px;float:right;" onclick="location.reload()">重置</a>
+	    		<a harf="#" style="font-size:14px;float:right;" onclick="showData()">查看</a>
 	    	</div>
 
+	    	<div class="mydata">
+	    		<textarea id="mydata" readonly></textarea>
 	    		
+	    	</div>	
+	    	<a harf="#" style="font-size:14px;float:right;" onclick="hideData()">隐藏</a>
+	    		<a harf="#" style="font-size:14px;float:right;" onclick="deleteData()">清空数据</a>
 		</div>
 	</body>
 	<script>
-
-//引入下载文件所需的js库文件
-	       /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
-        var saveAs=saveAs||function(e){"use strict";if(typeof e==="undefined"||typeof navigator!=="undefined"&&/MSIE [1-9]\./.test(navigator.userAgent)){return}var t=e.document,n=function(){return e.URL||e.webkitURL||e},r=t.createElementNS("http://www.w3.org/1999/xhtml","a"),o="download"in r,a=function(e){var t=new MouseEvent("click");e.dispatchEvent(t)},i=/constructor/i.test(e.HTMLElement)||e.safari,f=/CriOS\/[\d]+/.test(navigator.userAgent),u=function(t){(e.setImmediate||e.setTimeout)(function(){throw t},0)},s="application/octet-stream",d=1e3*40,c=function(e){var t=function(){if(typeof e==="string"){n().revokeObjectURL(e)}else{e.remove()}};setTimeout(t,d)},l=function(e,t,n){t=[].concat(t);var r=t.length;while(r--){var o=e["on"+t[r]];if(typeof o==="function"){try{o.call(e,n||e)}catch(a){u(a)}}}},p=function(e){if(/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type)){return new Blob([String.fromCharCode(65279),e],{type:e.type})}return e},v=function(t,u,d){if(!d){t=p(t)}var v=this,w=t.type,m=w===s,y,h=function(){l(v,"writestart progress write writeend".split(" "))},S=function(){if((f||m&&i)&&e.FileReader){var r=new FileReader;r.onloadend=function(){var t=f?r.result:r.result.replace(/^data:[^;]*;/,"data:attachment/file;");var n=e.open(t,"_blank");if(!n)e.location.href=t;t=undefined;v.readyState=v.DONE;h()};r.readAsDataURL(t);v.readyState=v.INIT;return}if(!y){y=n().createObjectURL(t)}if(m){e.location.href=y}else{var o=e.open(y,"_blank");if(!o){e.location.href=y}}v.readyState=v.DONE;h();c(y)};v.readyState=v.INIT;if(o){y=n().createObjectURL(t);setTimeout(function(){r.href=y;r.download=u;a(r);h();c(y);v.readyState=v.DONE});return}S()},w=v.prototype,m=function(e,t,n){return new v(e,t||e.name||"download",n)};if(typeof navigator!=="undefined"&&navigator.msSaveOrOpenBlob){return function(e,t,n){t=t||e.name||"download";if(!n){e=p(e)}return navigator.msSaveOrOpenBlob(e,t)}}w.abort=function(){};w.readyState=w.INIT=0;w.WRITING=1;w.DONE=2;w.error=w.onwritestart=w.onprogress=w.onwrite=w.onabort=w.onerror=w.onwriteend=null;return m}(typeof self!=="undefined"&&self||typeof window!=="undefined"&&window||this.content);if(typeof module!=="undefined"&&module.exports){module.exports.saveAs=saveAs}else if(typeof define!=="undefined"&&define!==null&&define.amd!==null){define("FileSaver.js",function(){return saveAs})}
+		if(window.localStorage.mydata){
+			document.getElementById('mydata').value = window.localStorage.mydata;
+		}
 
 		//保存数据至缓存
 		function submitData(){
@@ -130,9 +138,10 @@
 
 		    //读取缓存中的老用户数据，和新用户数据一起拼接并重新保存在缓存中
 		    window.localStorage.mydata = window.localStorage.mydata ? window.localStorage.mydata+'\r\n'+data : data;
-		    console.log(window.localStorage.mydata);
+		    //console.log(window.localStorage.mydata);
 		    //弹出提示框
-		    alert('数据保存成功~');
+		    document.getElementById('mydata').value = window.localStorage.mydata;
+		    alert('thank you so much ~');
 		    //页面刷新（重置）
 		    location.reload();
 		}
@@ -161,15 +170,16 @@
 
 
 		//下载localStorage的数据存成文件到本地
-		function getFile(){
-			if(window.localStorage){
-				var content = window.localStorage.mydata ? window.localStorage.mydata : '尚无用户数据';
-                //新数据写入txt文件
-                 var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
-                 if (confirm("下载之后是否需要清除缓存数据，保证之后的数据干净？")){
-                 		window.localStorage.removeItem('mydata');
-                 }
-                 saveAs(blob, "data"+getNowFormatDate()+".txt");//保存
+		function showData(){
+			document.getElementById('mydata').style.setProperty('visibility','visible');
+		}
+		function hideData(){
+			document.getElementById('mydata').style.setProperty('visibility','hidden');
+		}
+		function deleteData(){
+			if(confirm("确定清除缓存中的所有数据？")){
+				window.localStorage.removeItem('mydata');
+				location.reload();
 			}
 		}
 	</script>
